@@ -58,7 +58,7 @@ def selfcheck(name, birth, area, schoolname, level):
         return {"error": True, "code": "UNKNOWN", "message": "알 수 없는 에러 발생."}
 
 
-async def asyncDiagnosis(name, birth, area, schoolname, level):
+async def asyncSelfCheck(name, birth, area, schoolname, level):
     name = encrypt(name)    # encrypt name
     birth = encrypt(birth)  # encrypt birth
     try:
