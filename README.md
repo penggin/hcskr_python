@@ -1,5 +1,5 @@
 # HCSKR📱
-[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.2.2-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr)</br>
+[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.2.7-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr)</br>
 
 파이썬용 학생 코로나 자가진단 라이브러리 입니다.
   - https://pypi.org/project/hcskr/
@@ -62,7 +62,10 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
 ## ↩️리턴값
 
 모든 리턴값은 Dict 로 반환됩니다.</br>
-리턴값 구조는 다음과 같습니다: </br>```{"error":Boolen(True,False),'code':"처리코드(밑의 처리코드 종류 참조)","message":"해당 에러나, 성공 상황에 대한 설명"}```
+리턴값 구조는 다음과 같습니다: </br>
+```
+{"error":Boolen(True,False),'code':"처리코드(밑의 처리코드 종류 참조)","message":"해당 에러나, 성공 상황에 대한 설명"}
+```
 
 <details><summary>처리코드 종류</summary>
 성공 = "SUCCESS"</br>  
