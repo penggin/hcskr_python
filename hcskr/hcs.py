@@ -2,7 +2,8 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_PKCS1_v1_5
 from base64 import b64decode, b64encode
 import requests
-import aiohttp
+import os
+import sys
 import json
 
 from .mapping import schoolinfo
@@ -59,6 +60,12 @@ def selfcheck(name, birth, area, schoolname, level):
 
 
 async def asyncSelfCheck(name, birth, area, schoolname, level):
+    try:
+        import aiohttp
+    except:
+        os.system(f"{sys.executable} -m pip install aiohttp==3.6.3")
+
+    import aiohttp
     name = encrypt(name)    # encrypt name
     birth = encrypt(birth)  # encrypt birth
     try:

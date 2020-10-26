@@ -1,1 +1,1 @@
-from .hcs import selfcheck, asyncSelfCheck
+from .hcs import selfcheck, asyncSelfCheck, encrypt
