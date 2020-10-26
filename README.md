@@ -1,5 +1,5 @@
 # HCSKR📱
-[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.2.9-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr)</br>
+[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.3.2-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr)</br>
 
 파이썬용 학생 코로나 자가진단 라이브러리 입니다.
   - https://pypi.org/project/hcskr/
@@ -20,7 +20,10 @@ pip install hcskr
 ```python
 import hcskr
 hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
+
 #hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류")
+
+#kwargs도 지원합니다 hcskr.selfcheck(birth="생년월일",schoolname="학교이름",area="서울",name="홍길동",level="중학교")
 ```
 
 <details><summary>▶️지원하는 모든 지역이름 보기</summary>
