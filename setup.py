@@ -8,10 +8,10 @@ setup(
 
     name='hcskr',
 
-    version='1.3.2',
+    version='1.3.6',
 
     description='코로나 자가진단 라이브러리 (Automation tool for https://hcs.eduro.go.kr/)',
-    license="Proprietary",
+    license="GPL-V3",
     author='LeoK',
 
     author_email='support@leok.kr',
@@ -34,7 +34,7 @@ setup(
 
     classifiers=[
         'Programming Language :: Python :: 3.8',
-        'License :: Other/Proprietary License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         #'Development Status :: 3 - Alpha',
         'Development Status :: 5 - Production/Stable',
     ],
