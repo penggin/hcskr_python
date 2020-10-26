@@ -17,11 +17,11 @@ def encrypt(n):
     return emsg.decode('utf-8')
 
 
-def selfcheck(name, birth, area, schoolname, schoollevel):
+def selfcheck(name, birth, area, schoolname, level):
     name = encrypt(name)
     birth = encrypt(birth)
     try:
-        info = schoolinfo(area, schoollevel)
+        info = schoolinfo(area, level)
     except:
         return {"error": True, "code": "FORMET", "message": "지역명이나 학교급을 잘못 입력하였습니다."}
     url = 'https://' + info["schoolurl"] + 'hcs.eduro.go.kr/school?lctnScCode=' + str(
