@@ -23,7 +23,7 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
 #hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류")
 ```
 
-<details><summary>지원하는 모든 지역이름 보기</summary>
+<details><summary>▶️지원하는 모든 지역이름 보기</summary>
 <p>
 지원하는 지역 이름은 다음과 같습니다: 
 
@@ -47,7 +47,7 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
 </p>
 </details>
 
-<details><summary>지원하는 모든 학교종류 보기</summary>
+<details><summary>▶️지원하는 모든 학교종류 보기</summary>
 <p>
 지원하는 학교급 이름은 다음과 같습니다: 
 
@@ -67,7 +67,7 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
 {"error":Boolen(True,False),'code':"처리코드(밑의 처리코드 종류 참조)","message":"해당 에러나, 성공 상황에 대한 설명"}
 ```
 
-<details><summary>처리코드 종류</summary>
+<details><summary>▶️처리코드 종류</summary>
 성공 = "SUCCESS"</br>  
 존재하지 않는 지역, 학교급 = "FORMET"</br>  
 학교 검색 실패 = "NOSCHOOL"</br>  
