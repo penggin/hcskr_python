@@ -8,7 +8,7 @@ setup(
 
     name='hcskr',
 
-    version='0.5.1',
+    version='1.2.2',
 
     description='코로나 자가진단 라이브러리 (Automation tool for https://hcs.eduro.go.kr/)',
     license="Proprietary",
@@ -35,7 +35,7 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 3.8',
         'License :: Other/Proprietary License',
-        'Development Status :: 3 - Alpha',
-        #'Development Status :: 5 - Production/Stable',
+        #'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
     ],
 )
