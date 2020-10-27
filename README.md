@@ -1,7 +1,9 @@
 # HCSKR📱
-[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.4.1-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr)</br>
+[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.5.0-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr) </br>
 
-파이썬용 학생 코로나 자가진단 라이브러리 입니다.
+파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
+**정상 작동을 위해 1.5.0버전으로 업그레이드 해주세요. 이 버전부터는 자동업데이트 기능이 포함되어 있습니다.**
+
   - https://pypi.org/project/hcskr/
   - https://github.com/331leo/hcskr_python
 
