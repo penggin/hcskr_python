@@ -8,7 +8,7 @@ setup(
 
     name='hcskr',
 
-    version='1.4.1',
+    version='1.5.0',
 
     description='코로나 자가진단 라이브러리 (Automation tool for https://hcs.eduro.go.kr/)',
     license="GPL-V3",
