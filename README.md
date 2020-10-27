@@ -30,7 +30,7 @@ hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
 import asyncio
 import hcskr
 async def main():
-    await hcs.asyncSelfCheck("이름","생년월일","지역","학교이름","학교종류")
+    await hcskr.asyncSelfCheck("이름","생년월일","지역","학교이름","학교종류")
 asyncio.get_event_loop().run_until_complete(main())
 ```
 
