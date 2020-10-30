@@ -1,15 +1,14 @@
 # HCSKR📱
-[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v1.5.0-9ACD32?style=flat-square&logo=pypi&logoColor=white&link=mailto:support@leok.kr) ![Badge](https://img.shields.io/badge/-v3.x-3776AB?style=flat-square&logo=python&logoColor=white&link=mailto:support@leok.kr) </br>
-
+[![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.5.0버전으로 업그레이드 해주세요. 이 버전부터는 자동업데이트 기능이 포함되어 있습니다.**
+**정상 작동을 위해 1.5.0이상으로 업그레이드 해주세요.**
 
   - https://pypi.org/project/hcskr/
   - https://github.com/331leo/hcskr_python
 
 
 ## 📥다운로드
-**이 모듈은 파이썬 3.6.x ~ 3.8.x 까지의 동작을 보장합니다.
+**이 모듈은 파이썬 3.5.x ~ 3.8.x 까지의 동작을 보장합니다.
 그 이외의 버전에서는 제대로 작동하지 않을 수 있습니다.**
 
 윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.

@@ -6,7 +6,7 @@ import aiohttp
 
 from .mapping import schoolinfo
 
-versioninfo = "1.5.0"
+versioninfo = "1.5.1"
 
 
 def encrypt(n):
