@@ -13,6 +13,7 @@ def encrypt(n):
     pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA81dCnCKt0NVH7j5Oh2+SGgEU0aqi5u6sYXemouJWXOlZO3jqDsHYM1qfEjVvCOmeoMNFXYSXdNhflU7mjWP8jWUmkYIQ8o3FGqMzsMTNxr+bAp0cULWu9eYmycjJwWIxxB7vUwvpEUNicgW7v5nCwmF5HS33Hmn7yDzcfjfBs99K5xJEppHG0qc+q3YXxxPpwZNIRFn0Wtxt0Muh1U8avvWyw03uQ/wMBnzhwUC8T4G5NclLEWzOQExbQ4oDlZBv8BM/WxxuOyu0I8bDUDdutJOfREYRZBlazFHvRKNNQQD2qDfjRz484uFs7b5nykjaMB9k/EJAuHjJzGs9MMMWtQIDAQAB"
     msg = n
     keyDER = b64decode(pubkey)
+
     keyPub = RSA.importKey(keyDER)
     cipher = Cipher_PKCS1_v1_5.new(keyPub)
     cipher_text = cipher.encrypt(msg.encode())
@@ -63,7 +64,6 @@ async def asyncSelfCheck(name, birth, area, schoolname, level):
 
         async with session.post(requrl, json=data) as response:
             res = await response.json()
-
             try:
                 token = res["token"]
             except:
@@ -76,25 +76,7 @@ async def asyncSelfCheck(name, birth, area, schoolname, level):
         # post diagnosis information
         endpoint = "https://{}hcs.eduro.go.kr/registerServey".format(info["schoolurl"])
         headers = {"Content-Type": "application/json", "Authorization": token}
-        surveydata = {
-            "rspns01": "1",
-            "rspns02": "1",
-            "rspns03": None,
-            "rspns04": None,
-            "rspns05": None,
-            "rspns06": None,
-            "rspns07": "0",
-            "rspns08": "0",
-            "rspns09": "0",
-            "rspns10": None,
-            "rspns11": None,
-            "rspns12": None,
-            "rspns13": None,
-            "rspns14": None,
-            "rspns15": None,
-            "rspns00": "Y",
-            "deviceUuid": "",
-        }
+        surveydata = {"rspns01":"1","rspns02":"1","rspns03":null,"rspns04":null,"rspns05":null,"rspns06":null,"rspns07":null,"rspns08":null,"rspns09":"0","rspns10":null,"rspns11":null,"rspns12":null,"rspns13":null,"rspns14":null,"rspns15":null,"rspns00":"Y","deviceUuid":"","upperToken":token,"upperUserNameEncpt":name}
 
         async with session.post(endpoint, json=surveydata, headers=headers) as response:
             res = await response.json()
