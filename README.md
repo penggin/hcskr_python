@@ -1,7 +1,8 @@
 # HCSKR📱
 [![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?color=orange&label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.5.0이상으로 업그레이드 해주세요.**
+**정상 작동을 위해 1.6.0이상으로 업그레이드 해주세요.<br>**
+**문항이 바뀌며 여러가지 변경사항으로 인해 꼭 1.6.0 이상을 사용해야 합니다.**
 
   - https://pypi.org/project/hcskr/
   - https://github.com/331leo/hcskr_python
@@ -110,6 +111,10 @@ print(data['message'])
 검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.
 ```
 ## 💡 TIP
-리턴값의 `'code'` 를 이용하시면 성공, 실패여부, 실패이유를 모두 알 수 있어요!</br>
+- 리턴값의 `'code'` 를 이용하시면 성공, 실패여부, 실패이유를 모두 알 수 있어요!</br>
 또한 `'message'`로 이용자에게 바로 실패이유를 알릴수도 있어요!
-
+- 선택 파라미터로 `customloginname` 을 입력하면, 수행자 이름을 바꿀수 있어요!
+```python 
+hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류","커스텀수행자") 
+```
+![screenshot](./img/screenshot.jpg)
