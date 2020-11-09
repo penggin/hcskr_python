@@ -6,7 +6,7 @@
 
   - https://pypi.org/project/hcskr/
   - https://github.com/331leo/hcskr_python
-
+  - https://github.com/331leo/hcs_api_readme (API분석 시트)
 
 ## 📥다운로드
 **이 모듈은 파이썬 3.5.x ~ 3.8.x 까지의 동작을 보장합니다.
