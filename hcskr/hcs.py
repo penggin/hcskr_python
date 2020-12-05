@@ -7,7 +7,7 @@ import base64
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 
-versioninfo = "1.6.1"
+versioninfo = "1.7.0"
 
 def encrypt(n):
     pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA81dCnCKt0NVH7j5Oh2+SGgEU0aqi5u6sYXemouJWXOlZO3jqDsHYM1qfEjVvCOmeoMNFXYSXdNhflU7mjWP8jWUmkYIQ8o3FGqMzsMTNxr+bAp0cULWu9eYmycjJwWIxxB7vUwvpEUNicgW7v5nCwmF5HS33Hmn7yDzcfjfBs99K5xJEppHG0qc+q3YXxxPpwZNIRFn0Wtxt0Muh1U8avvWyw03uQ/wMBnzhwUC8T4G5NclLEWzOQExbQ4oDlZBv8BM/WxxuOyu0I8bDUDdutJOfREYRZBlazFHvRKNNQQD2qDfjRz484uFs7b5nykjaMB9k/EJAuHjJzGs9MMMWtQIDAQAB=="
@@ -36,18 +36,18 @@ async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=N
         customloginname=name
     else:
         pass
-    name = encrypt(name)  # encrypt name
-    birth = encrypt(birth)  # encrypt birth
+    name = encrypt(name)  # Encrypt Name
+    birth = encrypt(birth)  # Encrypt Birth
     try:
-        info = schoolinfo(area, level)  # get schoolinfo as dictionary data.
+        info = schoolinfo(area, level)  # Get schoolInfo from Hcs API
     except:
         return {"error": True, "code": "FORMET", "message": "지역명이나 학교급을 잘못 입력하였습니다."}
     url = f"https://hcs.eduro.go.kr/v2/searchSchool?lctnScCode={info['schoolcode']}&schulCrseScCode={info['schoollevel']}&orgName={schoolname}&loginType=school"
 
 
-    # open aiohttp.ClientSession
+    # REST Client open
     async with aiohttp.ClientSession() as session:
-        # get school organization code using given school code
+        #Get Request to given Url
         async with session.get(url) as response:
             school_infos = await response.json()
 
@@ -67,7 +67,7 @@ async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=N
                     "message": "검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.",
                 }
 
-        # login with given school data
+        # Trying Login Session for get auth token
 
         data = {"orgCode": schoolcode, "name": name, "birthday": birth,"loginType":"school","stdntPNo":None}
         requrl = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/findUser"
@@ -82,8 +82,35 @@ async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=N
                     "code": "NOSTUDENT",
                     "message": "학교는 검색하였으나, 입력한 정보의 학생을 찾을 수 없습니다.",
                 }
+        # Hcs UserGroup Load
+        endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/selectUserGroup"
+        headers = {"Content-Type": "application/json", "Authorization": token}
+        async with session.post(endpoint,headers=headers) as response:
+            res = await response.json()
+            userdataobject={}
+            #try:
+            for user in res:
+                try:
+                    if user['otherYn'] == "N":
+                        userdataobject=user
+                except:
+                    pass
+            userPNo=userdataobject['userPNo']
+            token=userdataobject['token']
+            #except:
+            #    return {"error": True, "code": "UNKNOWN", "message": "SelectUserGroup: 알 수 없는 에러 발생."}
 
-        # post diagnosis information
+        # Hcs getUserInfo Request
+        endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/getUserInfo"
+        headers = {"Content-Type": "application/json", "Authorization": token}
+        data = {"orgCode": schoolcode,"userPNo": userPNo}
+        async with session.post(endpoint, json=data, headers=headers) as response:
+            try:
+                res = await response.json()
+                token=res['token']
+            except:
+                return {"error": True, "code": "UNKNOWN", "message": "getUserInfo: 알 수 없는 에러 발생."}
+        # Servey Register
         endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/registerServey"
         headers = {"Content-Type": "application/json", "Authorization": token}
         surveydata = {"rspns01":"1","rspns02":"1","rspns03":None,"rspns04":None,"rspns05":None,"rspns06":None,"rspns07":None,"rspns08":None,"rspns09":"0","rspns10":None,"rspns11":None,"rspns12":None,"rspns13":None,"rspns14":None,"rspns15":None,"rspns00":"Y","deviceUuid":"","upperToken":token,"upperUserNameEncpt":customloginname}
