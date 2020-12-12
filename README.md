@@ -1,8 +1,8 @@
 # HCSKR📱
 [![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?color=orange&label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.7.0이상으로 업그레이드 해주세요.<br>**
-**구조 변경, 그외의 여러가지 변경사항으로 인해 꼭 1.7.0 이상을 사용해야 합니다.**
+**정상 작동을 위해 1.8.0이상으로 업그레이드 해주세요.<br>**
+**구조 변경, 그외의 여러가지 변경사항으로 인해 꼭 1.8.0 이상을 사용해야 합니다.**
 
   - https://pypi.org/project/hcskr/
   - https://github.com/331leo/hcskr_python
@@ -22,17 +22,17 @@ pip install hcskr
 ```python
 #동기 처리
 import hcskr
-hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교")
+hcskr.selfcheck("홍길동","030510","서울","두둥실고","고등학교","1234")
 
-#hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류")
-#kwargs도 지원합니다 hcskr.selfcheck(birth="생년월일",schoolname="학교이름",area="서울",name="홍길동",level="중학교")
+#hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)")
+#kwargs도 지원합니다 hcskr.selfcheck(birth="생년월일",schoolname="학교이름",area="서울",name="홍길동",level="중학교",password="1234")
 ```
 ```python
 #비동기 처리 
 import asyncio
 import hcskr
 async def main():
-    await hcskr.asyncSelfCheck("이름","생년월일","지역","학교이름","학교종류")
+    await hcskr.asyncSelfCheck("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)")
 asyncio.get_event_loop().run_until_complete(main())
 ```
 
@@ -84,7 +84,8 @@ asyncio.get_event_loop().run_until_complete(main())
 성공 = "SUCCESS"</br>  
 존재하지 않는 지역, 학교급 = "FORMET"</br>  
 학교 검색 실패 = "NOSCHOOL"</br>  
-학생 검색 실패 = "NOSTUDENT"</br>  
+학생 검색 실패 = "NOSTUDENT"</br>
+비밀번호에러 = "PASSWORD"</br>  
 알 수 없는 에러 = "UNKNOWN" 
 </details>
 
@@ -97,8 +98,8 @@ name = input("이름을 입력하세요: ")
 birth = input("생년월일을 입력하세요: ")
 level = input("학교종류를 입력하세요(예: 초등학교, 중학교, 고등학교): ")
 region = input("지역을 입력하세요(예: 서울, 경기, 전남....): ")
-school = input("학교이름을 입력하세요(예: 두둥실고): ")
-data = hcskr.selfcheck(name,birth,region,school,level)
+password = input("비밀번호를 입력하세요(예: 1234): ")
+data = hcskr.selfcheck(name,birth,region,school,level,password)
 print(data['message'])
 ```
 ----
@@ -108,6 +109,7 @@ print(data['message'])
 학교종류를 입력하세요(예: 초등학교, 중학교, 고등학교): 고등학교
 지역을 입력하세요(예: 서울, 경기, 전남....): 서울
 학교이름을 입력하세요(예: 두둥실고): 두둥둥실고
+비밀번호를 입력하세요(예: 1234): 1234
 검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.
 ```
 ## 💡 TIP
@@ -115,6 +117,6 @@ print(data['message'])
 또한 `'message'`로 이용자에게 바로 실패이유를 알릴수도 있어요!
 - 선택 파라미터로 `customloginname` 을 입력하면, 수행자 이름을 바꿀수 있어요!
 ```python 
-hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류","커스텀수행자") 
+hcskr.selfcheck("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)", "커스텀수행자") 
 ```
 ![screenshot](./img/screenshot.jpg)

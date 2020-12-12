@@ -7,7 +7,7 @@ import base64
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 
-versioninfo = "1.7.0"
+versioninfo = "1.8.0"
 
 
 def encrypt(n):
@@ -28,17 +28,18 @@ def encrypt(n):
     return encrypt_msg_list[0].decode("utf-8")
 
 
-def selfcheck(name, birth, area, schoolname, level, customloginname=None, loop=asyncio.get_event_loop()):
-    return loop.run_until_complete(asyncSelfCheck(name, birth, area, schoolname, level, customloginname))
+def selfcheck(name, birth, area, schoolname, level, password, customloginname=None, loop=asyncio.get_event_loop()):
+    return loop.run_until_complete(asyncSelfCheck(name, birth, area, schoolname, level, password, customloginname))
 
 
-async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=None):
+async def asyncSelfCheck(name, birth, area, schoolname, level, password, customloginname=None):
     if customloginname == None:
         customloginname = name
     else:
         pass
     name = encrypt(name)  # Encrypt Name
     birth = encrypt(birth)  # Encrypt Birth
+    password = encrypt(password) # Encrypt Password
     try:
         info = schoolinfo(area, level)  # Get schoolInfo from Hcs API
     except:
@@ -70,9 +71,9 @@ async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=N
         # Trying Login Session for get auth token
 
         data = {"orgCode": schoolcode, "name": name, "birthday": birth, "loginType": "school", "stdntPNo": None}
-        requrl = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/findUser"
+        endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/findUser"
 
-        async with session.post(requrl, json=data) as response:
+        async with session.post(endpoint, json=data) as response:
             res = await response.json()
             try:
                 token = res["token"]
@@ -83,10 +84,31 @@ async def asyncSelfCheck(name, birth, area, schoolname, level, customloginname=N
                     "message": "학교는 검색하였으나, 입력한 정보의 학생을 찾을 수 없습니다.",
                 }
 
+        # Hcs Password vaildtion
+        headers = {"Content-Type": "application/json", "Authorization": token}
+        data = {"password":password,"deviceUuid":""}
+        endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/validatePassword"
+
+        async with session.post(endpoint, json=data,headers=headers) as response:
+
+            try:
+                res = await response.json()
+                try:
+                    if res['isError']:
+                        return {
+                            "error": True,
+                            "code": "PASSWORD",
+                            "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
+                            }
+                except:
+                    token = res
+            except:
+                return {"error": True, "code": "UNKNOWN", "message": "validatePassword: 알 수 없는 에러 발생."}
         # Hcs getUserInfo Request
         endpoint = f"https://{info['schoolurl']}hcs.eduro.go.kr/v2/getUserInfo"
         headers = {"Content-Type": "application/json", "Authorization": token}
-        async with session.post(endpoint, json={}, headers=headers) as response:
+        data = {"orgCode":schoolcode}
+        async with session.post(endpoint, json=data, headers=headers) as response:
             try:
                 res = await response.json()
                 token = res['token']
