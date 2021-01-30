@@ -6,7 +6,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 setup(
     name="hcskr",
-    version="1.8.0",
+    version="1.9.0",
     description="코로나 자가진단 라이브러리(모듈) (Automation tool for https://hcs.eduro.go.kr/)",
     license="GPL-V3",
     author="LeoK",
@@ -15,7 +15,7 @@ setup(
     download_url="https://github.com/331leo/hcskr_python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["pycryptodome", "aiohttp"],
+    install_requires=["pycryptodome", "aiohttp", "pyjwt"],
     packages=find_packages(),
     keywords=["korea", "covid", "auto", "hcs", "corona"],
     python_requires=">=3",
