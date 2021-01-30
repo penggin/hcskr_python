@@ -93,15 +93,14 @@ asyncio.get_event_loop().run_until_complete(main())
 > ```python
 > #동기 처리
 > import hcskr
-> result = hcskr.generatetoken("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)")
-> token = result['token']
+> result = hcskr.generatetoken("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)") #리턴값 참고하세요
 >
 > #비동기 처리
 > import asyncio
 > import hcskr
 > async def main():
->   result = await hcskr.asyncGenerateToken("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)")
->   token = result['token']
+>   result = await hcskr.asyncGenerateToken("이름","생년월일","지역","학교이름","학교종류","비밀번호(숫자4자리)") #리턴값 참고하세요
+>
 > asyncio.get_event_loop().run_until_complete(main())
 > ```
 
