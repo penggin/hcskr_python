@@ -9,7 +9,7 @@ from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 import jwt #This module is "PyJWT" https://pypi.org/project/PyJWT/
 
-versioninfo = "1.9.0"
+versioninfo = "1.9.2"
 
 pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA81dCnCKt0NVH7j5Oh2+SGgEU0aqi5u6sYXemouJWXOlZO3jqDsHYM1qfEjVvCOmeoMNFXYSXdNhflU7mjWP8jWUmkYIQ8o3FGqMzsMTNxr+bAp0cULWu9eYmycjJwWIxxB7vUwvpEUNicgW7v5nCwmF5HS33Hmn7yDzcfjfBs99K5xJEppHG0qc+q3YXxxPpwZNIRFn0Wtxt0Muh1U8avvWyw03uQ/wMBnzhwUC8T4G5NclLEWzOQExbQ4oDlZBv8BM/WxxuOyu0I8bDUDdutJOfREYRZBlazFHvRKNNQQD2qDfjRz484uFs7b5nykjaMB9k/EJAuHjJzGs9MMMWtQIDAQAB=="
 def encrypt(n):
@@ -157,13 +157,16 @@ async def asyncGenerateToken(name, birth, area, schoolname, level, password):
     login_result = await asyncUserLogin(name, birth, area, schoolname, level, password)
     if login_result['error']:
         return login_result
-    data={"name":str(name),"birth":str(birth),"area":str(area),"schoolname":str(schoolname),"level":str(level),"password":str(password)}
-    token=b64encode(jwt.encode(data,pubkey,"HS256")).decode("utf8")
+    data = {"name": str(name), "birth": str(birth), "area": str(area), "schoolname": str(schoolname), "level": str(level), "password": str(password)}
+    jwt_token = jwt.encode(data, pubkey, algorithm="HS256")
+    if isinstance(jwt_token, str):
+        jwt_token = jwt_token.encode("utf8")
+    token = b64encode(jwt_token).decode("utf8")
     return {"error": False, "code": "SUCCESS", "message": "자가진단 토큰 발급 성공!", "token": token}
     
 async def asyncTokenSelfCheck(token):
     try:
-        data = jwt.decode(base64.b64decode(token), pubkey)
+        data = jwt.decode(b64decode(token), pubkey, algorithms="HS256")
     except Exception as e:
         return {"error": True, "code": "WRONGTOKEN", "message": "올바르지 않은 토큰입니다."}
     return await asyncSelfCheck(data['name'], data['birth'], data['area'], data['schoolname'], data['level'], data['password'])

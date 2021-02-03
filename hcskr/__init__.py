@@ -1,4 +1,4 @@
-from .hcs import asyncSelfCheck, asyncUserLogin, asyncTokenSelfCheck, asyncGenerateToken, selfcheck, userlogin, tokenselfcheck, generatetoken
+from .hcs import asyncSelfCheck, asyncUserLogin, asyncTokenSelfCheck, asyncGenerateToken, selfcheck, userlogin, tokenselfcheck, generatetoken, versioninfo
 import aiohttp
 import os
 import sys
