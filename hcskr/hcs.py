@@ -84,7 +84,7 @@ async def asyncUserLogin(name, birth, area, schoolname, level, password):
     try:
         info = schoolinfo(area, level)  # Get schoolInfo from Hcs API
     except:
-        return {"error": True, "code": "WRONG_FORMAT", "message": "지역명이나 학교급을 잘못 입력하였습니다."}
+        return {"error": True, "code": "FORMET", "message": "지역명이나 학교급을 잘못 입력하였습니다."}
     url = f"https://hcs.eduro.go.kr/v2/searchSchool?lctnScCode={info['schoolcode']}&schulCrseScCode={info['schoollevel']}&orgName={schoolname}&loginType=school"
 
     # REST Client open
@@ -96,7 +96,7 @@ async def asyncUserLogin(name, birth, area, schoolname, level, password):
             if len(school_infos["schulList"]) > 5:
                 return {
                     "error": True,
-                    "code": "TOO_MANY_SCHOOL",
+                    "code": "NOSCHOOL",
                     "message": "너무 많은 학교가 검색되었습니다. 지역, 학교급을 제대로 입력하고 학교 이름을 보다 상세하게 적어주세요.",
                 }
 
@@ -105,7 +105,7 @@ async def asyncUserLogin(name, birth, area, schoolname, level, password):
             except:
                 return {
                     "error": True,
-                    "code": "NO_SCHOOL",
+                    "code": "NOSCHOOL",
                     "message": "검색 가능한 학교가 없습니다. 지역, 학교급을 제대로 입력하였는지 확인해주세요.",
                 }
 
@@ -121,7 +121,7 @@ async def asyncUserLogin(name, birth, area, schoolname, level, password):
             except:
                 return {
                     "error": True,
-                    "code": "NO_STUDENT",
+                    "code": "NOSTUDENT",
                     "message": "학교는 검색하였으나, 입력한 정보의 학생을 찾을 수 없습니다.",
                 }
 
@@ -138,7 +138,7 @@ async def asyncUserLogin(name, birth, area, schoolname, level, password):
                     if res['isError']:
                         return {
                             "error": True,
-                            "code": "WRONG_PASSWORD",
+                            "code": "PASSWORD",
                             "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
                             }
                 except:
@@ -164,9 +164,9 @@ async def asyncGenerateToken(name, birth, area, schoolname, level, password):
     token = b64encode(jwt_token).decode("utf8")
     return {"error": False, "code": "SUCCESS", "message": "자가진단 토큰 발급 성공!", "token": token}
     
-async def asyncTokenSelfCheck(token, customloginname):
+async def asyncTokenSelfCheck(token, customloginname=None):
     try:
         data = jwt.decode(b64decode(token), pubkey, algorithms="HS256")
     except Exception as e:
-        return {"error": True, "code": "WRONG_TOKEN", "message": "올바르지 않은 토큰입니다."}
+        return {"error": True, "code": "WRONGTOKEN", "message": "올바르지 않은 토큰입니다."}
     return await asyncSelfCheck(data['name'], data['birth'], data['area'], data['schoolname'], data['level'], data['password'], customloginname)
