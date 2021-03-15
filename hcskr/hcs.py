@@ -164,9 +164,9 @@ async def asyncGenerateToken(name, birth, area, schoolname, level, password):
     token = b64encode(jwt_token).decode("utf8")
     return {"error": False, "code": "SUCCESS", "message": "자가진단 토큰 발급 성공!", "token": token}
     
-async def asyncTokenSelfCheck(token):
+async def asyncTokenSelfCheck(token, customloginname=None):
     try:
         data = jwt.decode(b64decode(token), pubkey, algorithms="HS256")
     except Exception as e:
         return {"error": True, "code": "WRONGTOKEN", "message": "올바르지 않은 토큰입니다."}
-    return await asyncSelfCheck(data['name'], data['birth'], data['area'], data['schoolname'], data['level'], data['password'])
+    return await asyncSelfCheck(data['name'], data['birth'], data['area'], data['schoolname'], data['level'], data['password'], customloginname)
