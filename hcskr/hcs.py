@@ -33,8 +33,8 @@ def generatetoken(
     return asyncio.get_event_loop().run_until_complete(asyncGenerateToken(**locals()))
 
 
-def tokenselfcheck(token: str):
-    return asyncio.get_event_loop().run_until_complete(asyncTokenSelfCheck(token))
+def tokenselfcheck(token: str, loop=asyncio.get_event_loop()):
+    return loop.run_until_complete(asyncTokenSelfCheck(token))
 
 
 async def asyncSelfCheck(
