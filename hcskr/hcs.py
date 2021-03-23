@@ -17,20 +17,21 @@ def selfcheck(
     level: str,
     password: str,
     customloginname: str = None,
+    loop=asyncio.get_event_loop()
 ):
-    return asyncio.get_event_loop().run_until_complete(asyncSelfCheck(**locals()))
+    return loop.run_until_complete(asyncSelfCheck(**locals()))
 
 
 def userlogin(
-    name: str, birth: str, area: str, schoolname: str, level: str, password: str
+    name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
 ):
-    return asyncio.get_event_loop().run_until_complete(asyncUserLogin(**locals()))
+    return loop.run_until_complete(asyncUserLogin(**locals()))
 
 
 def generatetoken(
-    name: str, birth: str, area: str, schoolname: str, level: str, password: str
+    name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
 ):
-    return asyncio.get_event_loop().run_until_complete(asyncGenerateToken(**locals()))
+    return loop.run_until_complete(asyncGenerateToken(**locals()))
 
 
 def tokenselfcheck(token: str, loop=asyncio.get_event_loop()):
@@ -138,6 +139,7 @@ async def asyncUserLogin(
 
     try:
         res = await send_hcsreq(
+            headers={"Content-Type": "application/json"},
             endpoint="/v2/findUser",
             school=info["schoolurl"],
             json={
@@ -165,14 +167,14 @@ async def asyncUserLogin(
             school=info["schoolurl"],
             json={"password": password, "deviceUuid": ""},
         )
-
-        if res["isError"]:
-            return {
-                "error": True,
-                "code": "PASSWORD",
-                "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
-            }
-
+        if isinstance(res, dict):
+            if res["isError"]:
+                return {
+                    "error": True,
+                    "code": "PASSWORD",
+                    "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
+                }
+        
         token = res
 
     except Exception:
