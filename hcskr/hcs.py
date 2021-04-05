@@ -19,19 +19,19 @@ def selfcheck(
     customloginname: str = None,
     loop=asyncio.get_event_loop()
 ):
-    return loop.run_until_complete(asyncSelfCheck(**locals()))
+    return loop.run_until_complete(asyncSelfCheck(name,birth,area,schoolname,level,password,customloginname))
 
 
 def userlogin(
     name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
 ):
-    return loop.run_until_complete(asyncUserLogin(**locals()))
+    return loop.run_until_complete(asyncUserLogin(name,birth,area,schoolname,level,password))
 
 
 def generatetoken(
     name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
 ):
-    return loop.run_until_complete(asyncGenerateToken(**locals()))
+    return loop.run_until_complete(asyncGenerateToken(name,birth,area,schoolname,level,password))
 
 
 def tokenselfcheck(token: str, loop=asyncio.get_event_loop()):
