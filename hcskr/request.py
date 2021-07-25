@@ -1,20 +1,29 @@
 from typing import Dict
+
 import aiohttp
 from aiohttp.client_exceptions import ServerDisconnectedError
 
-async def send_hcsreq(headers: Dict, endpoint: str, school: str, json: Dict):
+
+async def send_hcsreq(
+    headers: Dict,
+    endpoint: str,
+    school: str,
+    json: Dict,
+    session: aiohttp.ClientSession,
+):
     for attempt in range(5):
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    headers=headers, url=f"https://{school}hcs.eduro.go.kr{endpoint}", json=json
-                ) as resp:
-
-                    return await resp.json()
+            async with session.post(
+                headers=headers,
+                url=f"https://{school}hcs.eduro.go.kr{endpoint}",
+                json=json,
+            ) as resp:
+                return await resp.json()
         except ServerDisconnectedError as e:
             if attempt >= 4:
                 raise e
             continue
+
 
 async def search_school(code: str, level: str, org: str):
     for attempt in range(5):
@@ -28,4 +37,3 @@ async def search_school(code: str, level: str, org: str):
             if attempt >= 4:
                 raise e
             continue
-        

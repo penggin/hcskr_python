@@ -2,8 +2,8 @@
 
 [![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?color=orange&label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.9.2이상으로 업그레이드 해주세요.<br>**
-**버전 1.9.2: 토큰 관련 오류를 해결하였습니다.**
+**정상 작동을 위해 1.11.0이상으로 업그레이드 해주세요.<br>**
+**버전 1.11.0: 자가진단 보안강화 관련 패치**
 
 - https://pypi.org/project/hcskr/
 - https://github.com/331leo/hcskr_python
@@ -11,7 +11,7 @@
 
 ## 📥다운로드
 
-**이 모듈은 파이썬 3.5.x ~ 3.8.x 까지의 동작을 보장합니다.
+**이 모듈은 파이썬 3.8 ~ 3.10 까지의 동작을 보장합니다.
 이외의 버전에서는 제대로 작동하지 않을 수 있습니다.**
 
 윈도우나 리눅스의 터미널에서 다음과 같이 입력합니다.

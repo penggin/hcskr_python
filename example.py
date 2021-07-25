@@ -6,5 +6,5 @@ level = input("학교종류를 입력하세요(예: 초등학교, 중학교, 고
 region = input("지역을 입력하세요(예: 서울, 경기, 전남....): ")
 school = input("학교이름을 입력하세요(예: 두둥실고): ")
 password = input("비밀번호를 입력하세요(예: 1234): ")
-data = hcskr.selfcheck(name,birth,region,school,level,password)
-print(data['message'])
+data = hcskr.selfcheck(name, birth, region, school, level, password)
+print(data["message"])

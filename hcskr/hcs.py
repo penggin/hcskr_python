@@ -1,12 +1,14 @@
 import asyncio
+import json
 import sys
-
-import jwt
-
 from base64 import b64decode, b64encode
 
-from .mapping import schoolinfo, encrypt, pubkey
-from .request import send_hcsreq, search_school
+import aiohttp
+import jwt
+
+from .mapping import encrypt, pubkey, schoolinfo
+from .request import search_school, send_hcsreq
+from .transkey import mTransKey
 
 
 def selfcheck(
@@ -17,21 +19,56 @@ def selfcheck(
     level: str,
     password: str,
     customloginname: str = None,
-    loop=asyncio.get_event_loop()
+    loop=asyncio.get_event_loop(),
 ):
-    return loop.run_until_complete(asyncSelfCheck(name,birth,area,schoolname,level,password,customloginname))
+    return loop.run_until_complete(
+        asyncSelfCheck(name, birth, area, schoolname, level, password, customloginname)
+    )
+
+
+def changePassword(
+    name: str,
+    birth: str,
+    area: str,
+    schoolname: str,
+    level: str,
+    password: str,
+    newpassword: str,
+    loop=asyncio.get_event_loop(),
+):
+    return loop.run_until_complete(
+        asyncChangePassword(name, birth, area, schoolname, level, password, newpassword)
+    )
 
 
 def userlogin(
-    name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
+    name: str,
+    birth: str,
+    area: str,
+    schoolname: str,
+    level: str,
+    password: str,
+    loop=asyncio.get_event_loop(),
 ):
-    return loop.run_until_complete(asyncUserLogin(name,birth,area,schoolname,level,password))
+    return loop.run_until_complete(
+        asyncUserLogin(
+            name, birth, area, schoolname, level, password, aiohttp.ClientSession()
+        )
+    )
 
 
 def generatetoken(
-    name: str, birth: str, area: str, schoolname: str, level: str, password: str, loop=asyncio.get_event_loop()
+    name: str,
+    birth: str,
+    area: str,
+    schoolname: str,
+    level: str,
+    password: str,
+    loop=asyncio.get_event_loop(),
 ):
-    return loop.run_until_complete(asyncGenerateToken(name,birth,area,schoolname,level,password))
+    return loop.run_until_complete(
+        asyncGenerateToken(name, birth, area, schoolname, level, password)
+    )
 
 
 def tokenselfcheck(token: str, loop=asyncio.get_event_loop()):
@@ -47,68 +84,144 @@ async def asyncSelfCheck(
     password: str,
     customloginname: str = None,
 ):
-    if customloginname is None:
-        customloginname = name
+    async with aiohttp.ClientSession() as session:
+        if customloginname is None:
+            customloginname = name
 
-    login_result = await asyncUserLogin(name, birth, area, schoolname, level, password)
-
-    if login_result["error"]:
-        return login_result
-
-    try:
-        res = await send_hcsreq(
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": login_result["token"],
-            },
-            endpoint="/v2/getUserInfo",
-            school=login_result["info"]["schoolurl"],
-            json={"orgCode": login_result["schoolcode"]},
+        login_result = await asyncUserLogin(
+            name, birth, area, schoolname, level, password, session
         )
 
-        token = res["token"]
+        if login_result["error"]:
+            return login_result
 
-    except Exception:
-        return {
-            "error": True,
-            "code": "UNKNOWN",
-            "message": "getUserInfo: 알 수 없는 에러 발생.",
-        }
+        try:
+            res = await send_hcsreq(
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": login_result["token"],
+                },
+                endpoint="/v2/selectUserGroup",
+                school=login_result["info"]["schoolurl"],
+                json={},
+                session=session,
+            )
+            userdataobject = {}
+            for user in res:
+                if user["otherYn"] == "N":
+                    userdataobject = user
+                    break
 
-    try:
-        res = await send_hcsreq(
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": token,
-            },
-            endpoint="/registerServey",
-            school=login_result["info"]["schoolurl"],
-            json={
-                "rspns01": "1",
-                "rspns02": "1",
-                "rspns00": "Y",
-                "upperToken": token,
-                "upperUserNameEncpt": customloginname,
-            },
+            userPNo = userdataobject["userPNo"]
+            token = userdataobject["token"]
+
+            res = await send_hcsreq(
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": token,
+                },
+                endpoint="/v2/getUserInfo",
+                school=login_result["info"]["schoolurl"],
+                json={"orgCode": login_result["schoolcode"], userPNo: userPNo},
+                session=session,
+            )
+
+            token = res["token"]
+
+        except Exception:
+            return {
+                "error": True,
+                "code": "UNKNOWN",
+                "message": "getUserInfo: 알 수 없는 에러 발생.",
+            }
+
+        try:
+            res = await send_hcsreq(
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": token,
+                },
+                endpoint="/registerServey",
+                school=login_result["info"]["schoolurl"],
+                json={
+                    "rspns01": "1",
+                    "rspns02": "1",
+                    "rspns00": "Y",
+                    "upperToken": token,
+                    "upperUserNameEncpt": customloginname,
+                },
+                session=session,
+            )
+
+            return {
+                "error": False,
+                "code": "SUCCESS",
+                "message": "성공적으로 자가진단을 수행하였습니다.",
+                "regtime": res["registerDtm"],
+            }
+
+        except Exception:
+            return {"error": True, "code": "UNKNOWN", "message": "알 수 없는 에러 발생."}
+
+
+async def asyncChangePassword(
+    name: str,
+    birth: str,
+    area: str,
+    schoolname: str,
+    level: str,
+    password: str,
+    newpassword: str,
+):
+    async with aiohttp.ClientSession() as session:
+        login_result = await asyncUserLogin(
+            name, birth, area, schoolname, level, password, session
         )
 
-        return {
-            "error": False,
-            "code": "SUCCESS",
-            "message": "성공적으로 자가진단을 수행하였습니다.",
-            "regtime": res["registerDtm"],
-        }
+        if login_result["error"]:
+            return login_result
 
-    except Exception:
-        return {"error": True, "code": "UNKNOWN", "message": "알 수 없는 에러 발생."}
+        try:
+            res = await send_hcsreq(
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": login_result["token"],
+                },
+                endpoint="/v2/changePassword",
+                school=login_result["info"]["schoolurl"],
+                json={
+                    "password": encrypt(password),
+                    "newPassword": encrypt(newpassword),
+                },
+                session=session,
+            )
+
+            if res:
+                return {
+                    "error": False,
+                    "code": "SUCCESS",
+                    "message": "성공적으로 비밀번호 변경에 성공하였습니다.",
+                }
+
+        except Exception:
+            return {
+                "error": True,
+                "code": "INCORRECTPASSWORD",
+                "message": "getUserInfo: 알 수 없는 에러 발생.",
+            }
 
 
 async def asyncUserLogin(
-    name: str, birth: str, area: str, schoolname: str, level: str, password: str
+    name: str,
+    birth: str,
+    area: str,
+    schoolname: str,
+    level: str,
+    password: str,
+    session: aiohttp.ClientSession,
 ):
     name = encrypt(name)  # Encrypt Name
     birth = encrypt(birth)  # Encrypt Birth
-    password = encrypt(password)  # Encrypt Password
 
     try:
         info = schoolinfo(area, level)  # Get schoolInfo from Hcs API
@@ -149,6 +262,7 @@ async def asyncUserLogin(
                 "loginType": "school",
                 "stdntPNo": None,
             },
+            session=session,
         )
 
         token = res["token"]
@@ -161,12 +275,44 @@ async def asyncUserLogin(
         }
 
     try:
+        mtk = mTransKey("https://hcs.eduro.go.kr/transkeyServlet")
+        pw_pad = await mtk.new_keypad("number", "password", "password", "password")
+        encrypted = pw_pad.encrypt_password(password)
+        hm = mtk.hmac_digest(encrypted.encode())
+
         res = await send_hcsreq(
-            headers={"Content-Type": "application/json", "Authorization": token},
+            headers={
+                "Referer": "https://hcs.eduro.go.kr/",
+                "Authorization": token,
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json;charset=utf-8",
+            },
             endpoint="/v2/validatePassword",
             school=info["schoolurl"],
-            json={"password": password, "deviceUuid": ""},
+            json={
+                "password": json.dumps(
+                    {
+                        "raon": [
+                            {
+                                "id": "password",
+                                "enc": encrypted,
+                                "hmac": hm,
+                                "keyboardType": "number",
+                                "keyIndex": mtk.crypto.rsa_encrypt(b"32"),
+                                "fieldType": "password",
+                                "seedKey": mtk.crypto.get_encrypted_key(),
+                                "initTime": mtk.initTime,
+                                "ExE2E": "false",
+                            }
+                        ]
+                    }
+                ),
+                "deviceUuid": "",
+                "makeSession": True,
+            },
+            session=session,
         )
+
         if isinstance(res, dict):
             if res["isError"]:
                 return {
@@ -174,7 +320,7 @@ async def asyncUserLogin(
                     "code": "PASSWORD",
                     "message": "학생정보는 검색하였으나, 비밀번호가 틀립니다.",
                 }
-        
+
         token = res
 
     except Exception:
@@ -190,7 +336,7 @@ async def asyncUserLogin(
     except Exception:
         caller_name = None
 
-    if caller_name == "asyncSelfCheck":
+    if caller_name == "asyncSelfCheck" or caller_name == "asyncChangePassword":
         return {
             "error": False,
             "code": "SUCCESS",
@@ -206,33 +352,34 @@ async def asyncUserLogin(
 async def asyncGenerateToken(
     name: str, birth: str, area: str, schoolname: str, level: str, password: str
 ):
-    login_result = await asyncUserLogin(**locals())
+    async with aiohttp.ClientSession() as session:
+        login_result = await asyncUserLogin(**locals())
 
-    if login_result["error"]:
-        return login_result
+        if login_result["error"]:
+            return login_result
 
-    data = {
-        "name": str(name),
-        "birth": str(birth),
-        "area": str(area),
-        "schoolname": str(schoolname),
-        "level": str(level),
-        "password": str(password),
-    }
+        data = {
+            "name": str(name),
+            "birth": str(birth),
+            "area": str(area),
+            "schoolname": str(schoolname),
+            "level": str(level),
+            "password": str(password),
+        }
 
-    jwt_token = jwt.encode(data, pubkey, algorithm="HS256")
+        jwt_token = jwt.encode(data, pubkey, algorithm="HS256")
 
-    if isinstance(jwt_token, str):
-        jwt_token = jwt_token.encode("utf8")
+        if isinstance(jwt_token, str):
+            jwt_token = jwt_token.encode("utf8")
 
-    token = b64encode(jwt_token).decode("utf8")
+        token = b64encode(jwt_token).decode("utf8")
 
-    return {
-        "error": False,
-        "code": "SUCCESS",
-        "message": "자가진단 토큰 발급 성공!",
-        "token": token,
-    }
+        return {
+            "error": False,
+            "code": "SUCCESS",
+            "message": "자가진단 토큰 발급 성공!",
+            "token": token,
+        }
 
 
 async def asyncTokenSelfCheck(token: str, customloginname: str = None):
