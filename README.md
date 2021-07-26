@@ -119,6 +119,22 @@ asyncio.get_event_loop().run_until_complete(main())
 > asyncio.get_event_loop().run_until_complete(main())
 > ```
 
+> 비밀번호 변경
+> 
+> ```python
+> #동기처리
+> import hcskr
+> hcskr.changePassword("이름","생년월일","지역","학교이름","학교종류","현재 비밀번호(숫자4자리)", "변경할 비밀번호(숫자4자리)")
+>
+> #비동기 처리
+> import asyncio
+> import hcskr
+> async def main():
+>   await hcskr.asyncChangePassword("이름","생년월일","지역","학교이름","학교종류","현재 비밀번호(숫자4자리)","변경할 비밀번호(숫자4자리)")
+> asyncio.get_event_loop().run_until_complete(main())
+> ```
+
+
 ## ↩️리턴값
 
 모든 리턴값은 Dict 로 반환됩니다.</br>
