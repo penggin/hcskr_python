@@ -277,7 +277,7 @@ async def asyncUserLogin(
     try:
         mtk = mTransKey("https://hcs.eduro.go.kr/transkeyServlet")
         pw_pad = await mtk.new_keypad("number", "password", "password", "password")
-        encrypted = pw_pad.encrypt_password(password)
+        encrypted = pw_pad.encrypt_password(password, mtk.decInitTime)
         hm = mtk.hmac_digest(encrypted.encode())
 
         res = await send_hcsreq(

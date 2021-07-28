@@ -20,7 +20,7 @@ class KeyPad:
                 raise Exception("Only Number")
         return geos
 
-    def geos_encrypt(self, geos):
+    def geos_encrypt(self, geos, dec_init_time):
         out = ""
         for geo in geos:
             x, y = geo
@@ -53,8 +53,9 @@ class KeyPad:
             )
 
             out += "$" + self.crypto.seed_encrypt(iv, data).hex(",")
+            out += "$" + self.crypto.seed_encrypt(iv, dec_init_time).hex(",")
         return out
 
-    def encrypt_password(self, pw):
+    def encrypt_password(self, pw, dec_init_time):
         geos = self.get_geo(pw)
-        return self.geos_encrypt(geos)
+        return self.geos_encrypt(geos, bytes(dec_init_time, encoding="UTF-8"))

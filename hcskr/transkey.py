@@ -12,6 +12,7 @@ class mTransKey:
         self.crypto = crypto.Crypto()
         self.token = ""
         self.initTime = ""
+        self.decInitTime = ""
         self.qwerty = []
         self.number = []
 
@@ -30,7 +31,8 @@ class mTransKey:
     async def _get_init_time(self, session: aiohttp.ClientSession):
         async with session.get("{}?op=getInitTime".format(self.servlet_url)) as resp:
             txt = await resp.text()
-            self.initTime = re.findall("var initTime='(.*)';", txt)[0]
+            self.decInitTime, self.initTime = re.findall("var decInitTime='(.*)';var initTime='(.*)';", txt)[0]
+
 
     async def _get_public_key(self, session: aiohttp.ClientSession):
         async with session.post(
