@@ -7,7 +7,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 setup(
     name="hcskr",
-    version="1.11.0",
+    version="1.12.1",
     description="코로나 자가진단 라이브러리(모듈) (Automation tool for https://hcs.eduro.go.kr/)",
     license="GPL-V3",
     author="LeoK",

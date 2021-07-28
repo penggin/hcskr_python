@@ -2,8 +2,8 @@
 
 [![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?color=orange&label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.11.0이상으로 업그레이드 해주세요.<br>**
-**버전 1.11.0: 자가진단 보안강화 관련 패치**
+**정상 작동을 위해 1.12.1이상으로 업그레이드 해주세요.<br>**
+**버전 1.12.1: 자가진단 보안강화 관련 패치**
 
 - https://pypi.org/project/hcskr/
 - https://github.com/331leo/hcskr_python
@@ -120,7 +120,7 @@ asyncio.get_event_loop().run_until_complete(main())
 > ```
 
 > 비밀번호 변경
-> 
+>
 > ```python
 > #동기처리
 > import hcskr
@@ -133,7 +133,6 @@ asyncio.get_event_loop().run_until_complete(main())
 >   await hcskr.asyncChangePassword("이름","생년월일","지역","학교이름","학교종류","현재 비밀번호(숫자4자리)","변경할 비밀번호(숫자4자리)")
 > asyncio.get_event_loop().run_until_complete(main())
 > ```
-
 
 ## ↩️리턴값
 
