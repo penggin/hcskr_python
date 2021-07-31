@@ -277,7 +277,7 @@ async def asyncUserLogin(
     try:
         mtk = mTransKey("https://hcs.eduro.go.kr/transkeyServlet")
         pw_pad = await mtk.new_keypad("number", "password", "password", "password")
-        encrypted = pw_pad.encrypt_password(password, mtk.decInitTime)
+        encrypted = pw_pad.encrypt_password(password)
         hm = mtk.hmac_digest(encrypted.encode())
 
         res = await send_hcsreq(
@@ -298,7 +298,7 @@ async def asyncUserLogin(
                                 "enc": encrypted,
                                 "hmac": hm,
                                 "keyboardType": "number",
-                                "keyIndex": mtk.crypto.rsa_encrypt(b"32"),
+                                "keyIndex": mtk.keyIndex,
                                 "fieldType": "password",
                                 "seedKey": mtk.crypto.get_encrypted_key(),
                                 "initTime": mtk.initTime,
@@ -323,7 +323,8 @@ async def asyncUserLogin(
 
         token = res
 
-    except Exception:
+    except Exception as e:
+        raise e
         return {
             "error": True,
             "code": "UNKNOWN",

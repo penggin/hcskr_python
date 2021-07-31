@@ -15,6 +15,7 @@ class mTransKey:
         self.decInitTime = ""
         self.qwerty = []
         self.number = []
+        self.keyIndex = ""
 
     async def _get_data(self):
         async with aiohttp.ClientSession() as session:
@@ -31,12 +32,13 @@ class mTransKey:
     async def _get_init_time(self, session: aiohttp.ClientSession):
         async with session.get("{}?op=getInitTime".format(self.servlet_url)) as resp:
             txt = await resp.text()
-            self.decInitTime, self.initTime = re.findall("var decInitTime='(.*)';var initTime='(.*)';", txt)[0]
-
+            self.initTime = re.findall("var initTime='(.*)';", txt)[0]
 
     async def _get_public_key(self, session: aiohttp.ClientSession):
-        async with session.post(
-            self.servlet_url, data={"op": "getPublicKey", "TK_requestToken": self.token}
+        async with session.post(self.servlet_url, data={
+                "op": "getPublicKey",
+                "TK_requestToken": self.token
+            }
         ) as resp:
             key = await resp.text()
             self.crypto.set_pub_key(key)
@@ -73,6 +75,28 @@ class mTransKey:
     async def new_keypad(self, key_type, name, inputName, fieldType="password"):
         await self._get_data()
         async with aiohttp.ClientSession() as session:
+            key_index_res = await session.post(
+                self.servlet_url,
+                data={
+                    "op": "getKeyIndex",
+                    "name": "password",
+                    "keyType": "single",
+                    "keyboardType": "number",
+                    "fieldType": "password",
+                    "inputName": "password",
+                    "parentKeyboard": "false",
+                    "transkeyUuid": self.crypto.uuid,
+                    "exE2E": "false",
+                    "TK_requestToken": self.token,
+                    "isCrt": "false",
+                    "allocationIndex": "3011907012",
+                    "keyIndex": "",
+                    "initTime": self.initTime,
+                    "talkBack": "true"
+                }
+            )
+            self.keyIndex = await key_index_res.text()
+
             async with session.post(
                 self.servlet_url,
                 data={
@@ -86,7 +110,7 @@ class mTransKey:
                     "exE2E": "false",
                     "isCrt": "false",
                     "allocationIndex": "3011907012",
-                    "keyIndex": self.crypto.rsa_encrypt(b"32"),
+                    "keyIndex": self.keyIndex,
                     "initTime": self.initTime,
                     "TK_requestToken": self.token,
                     "dummy": "undefined",
@@ -96,7 +120,7 @@ class mTransKey:
                 skip_data = await resp.text()
                 skip = skip_data.split(",")
 
-                return KeyPad(self.crypto, key_type, skip, self.number)
+                return KeyPad(self.crypto, key_type, skip, self.number, self.initTime)
 
     def hmac_digest(self, message):
         return self.crypto.hmac_digest(message)

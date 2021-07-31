@@ -1220,9 +1220,15 @@ class SEED:
         D[0] = (D[0] << 8 ^ T0 >> 24) & 4294967295
 
     def my_cbc_encrypt(self, inData, k, iv):
-        xored = []
-        for i in range(0, 16):
-            xored.append(iv[i] ^ inData[i])
+        prev = iv
+        enced = b""
 
-        enc = self.SeedEncrypt(bytes(xored), k)
-        return enc
+        for i in range(0, len(inData), 16):
+            xored = []
+            for j in range(0, 16):
+                xored.append(prev[j] ^ inData[i+j])
+            enc = self.SeedEncrypt(bytes(xored), k)
+            enced += enc
+            prev = enc
+        return enced
+        
