@@ -324,11 +324,10 @@ async def asyncUserLogin(
         token = res
 
     except Exception as e:
-        raise e
         return {
             "error": True,
             "code": "UNKNOWN",
-            "message": "validatePassword: 알 수 없는 에러 발생.",
+            "message": f"validatePassword: 알 수 없는 에러 발생. {e}",
         }
 
     try:
