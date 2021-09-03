@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "hcskr_python"
+version = "1.14.0"
+description = "Korean COVID-19 Student Health Check Library for Python: 학생 코로나 자가진단 파이썬 라이브러리 (https://hcs.eduro.go.kr/)"
+authors = ["Leo Kim <me@leok.kr>"]
+license = "GPLv3"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pycryptodome = "^3.10.1"
+aiohttp = "^3.7.4"
+PyJWT = "^2.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

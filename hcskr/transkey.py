@@ -18,7 +18,7 @@ class mTransKey:
         self.keyIndex = ""
 
     async def _get_data(self):
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
             await self._get_token(session)
             await self._get_init_time(session)
             await self._get_public_key(session)
@@ -74,7 +74,7 @@ class mTransKey:
 
     async def new_keypad(self, key_type, name, inputName, fieldType="password"):
         await self._get_data()
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
             key_index_res = await session.post(
                 self.servlet_url,
                 data={

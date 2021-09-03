@@ -52,7 +52,7 @@ def userlogin(
 ):
     return loop.run_until_complete(
         asyncUserLogin(
-            name, birth, area, schoolname, level, password, aiohttp.ClientSession()
+            name, birth, area, schoolname, level, password, aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
         )
     )
 
@@ -84,7 +84,7 @@ async def asyncSelfCheck(
     password: str,
     customloginname: str = None,
 ):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
         if customloginname is None:
             customloginname = name
 
@@ -173,7 +173,7 @@ async def asyncChangePassword(
     password: str,
     newpassword: str,
 ):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
         login_result = await asyncUserLogin(
             name, birth, area, schoolname, level, password, session
         )
@@ -352,7 +352,7 @@ async def asyncUserLogin(
 async def asyncGenerateToken(
     name: str, birth: str, area: str, schoolname: str, level: str, password: str
 ):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
         login_result = await asyncUserLogin(**locals())
 
         if login_result["error"]:

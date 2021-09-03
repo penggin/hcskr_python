@@ -2,8 +2,7 @@
 
 [![Send mail](https://img.shields.io/badge/-support@leok.kr-63d863?style=flat-square&logo=gmail&logoColor=white&link=mailto:support@leok.kr)](mailto:support@leok.kr) [![Badge](https://img.shields.io/pypi/v/hcskr?label=Version&style=flat-square)](https://pypi.org/project/hcskr/) [![Send mail](https://img.shields.io/pypi/dm/hcskr?color=orange&label=Downloads&style=flat-square)](https://pypi.org/project/hcskr/) [![Licence](https://img.shields.io/pypi/l/hcskr?label=License&style=flat-square)](https://github.com/331leo/hcskr_python/blob/main/LICENSE) [![Badge](https://img.shields.io/pypi/status/hcskr?color=%230099ff&label=Status&style=flat-square)]() <br>
 파이썬용 학생 코로나 자가진단 라이브러리 입니다. <br>
-**정상 작동을 위해 1.13.0이상으로 업그레이드 해주세요.<br>**
-**버전 1.13.0: 7/31 자가진단 보안강화 관련 패치**
+**정상 작동을 위해 1.14.0이상으로 업그레이드 해주세요.<br>**
 
 - https://pypi.org/project/hcskr/
 - https://github.com/331leo/hcskr_python
